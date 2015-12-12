@@ -32,11 +32,12 @@ IOU.config(function($stateProvider, $urlRouterProvider){
 });
 
 IOU.controller('NavCtrl', function($scope, $firebaseArray, $firebaseObject, $state){
-  var ref = new Firebase('https://jordansdemo.firebaseio.com/user');
+  var ref = new Firebase('https://jordansdemo.firebaseio.com/users');
 
   ref.on('value', function(snapshot) {
     $scope.$apply(function () {
       $scope.users = snapshot.val();
+      console.log($scope.users);
     });
   });
 
@@ -45,9 +46,6 @@ IOU.controller('NavCtrl', function($scope, $firebaseArray, $firebaseObject, $sta
   $state.go('main', {user: user});
   };
 });
-
-
-
 
 
 

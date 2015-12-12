@@ -8,41 +8,31 @@
  * Controller of the angulardemoApp
  */
 angular.module('angulardemoApp')
-  .controller('MainCtrl', function ($scope, $stateParams) {
+  .controller('MainCtrl', function ($scope, $stateParams, $firebaseObject) {
     $scope.user = $stateParams.user;
-    $scope.itemsIOwe = [];
-    $scope.itemsYouOwe = [];
 
-    var FBref = new Firebase('https://jordansdemo.firebaseio.com/user/' + $scope.user);
+    //Bind the firebase location of our Friend
+    var FBFriendRef = new Firebase('https://jordansdemo.firebaseio.com/items/' + $scope.user + "/owes");
+    var FBFriendObj = $firebaseObject(FBFriendRef);
+    FBFriendObj.$bindTo($scope, "itemsFriendOwes");
 
-    FBref.on('value', function(snapshot) {
-        $scope.itemsOwed = snapshot.val();
-    });
+    //Bind the firebase location of the user         NOTE: change the "Jordan" here to the app user
+    var FBUserRef = new Firebase('https://jordansdemo.firebaseio.com/items/' + 'Jordan' + "/owes");
+    var FBUserObj = $firebaseObject(FBUserRef);
+    FBUserObj.$bindTo($scope, "itemsUserIsOwed");
 
-    $scope.increaseYourItem = function (itm, currentVal) {
-      var theVal = FBref.child(itm);
-      theVal.update({Jordan: currentVal+1});
+    $scope.updateQuantity = function (key, qty) {
+      var FBFriendItem = FBFriendRef.child(key);
+      FBFriendItem.update({qty: qty});
     };
 
-    $scope.decreaseYourItem = function (itm, currentVal) {
-      var theVal = FBref.child(itm);
-      theVal.update({Jordan: currentVal-1});
+    $scope.removeItem = function(key)  {
+      var FBFriendItem = FBFriendRef.child(key);
+      FBFriendItem.remove();
     };
 
-    $scope.submitYourItems = function (qty, itm) {
-
-    };
-
-
-
-    $scope.submitMyItems = function (input) {
-      $scope.itemsIOwe.push(input);
-    };
-
-    $scope.removeMyItem = function (item) {
-      $scope.itemsIOwe.splice(item, 1);
-    };
-    $scope.removeYourItem = function (item) {
-      $scope.itemsYouOwe.splice(item, 1);
+    $scope.addItem = function(qty, item)  {
+      var FBnewref = FBFriendRef.push();
+      FBnewref.set({name: item, qty: qty, to: 'Jordan'});
     };
   });
