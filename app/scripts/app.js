@@ -26,28 +26,27 @@ IOU.config(function($stateProvider, $urlRouterProvider){
     templateUrl: '/views/main.html',
     controller: 'MainCtrl',
     params: {
-      user: null
+      friend: null
     }
   });
 });
 
 IOU.controller('NavCtrl', function($scope, $firebaseArray, $firebaseObject, $state){
-  var ref = new Firebase('https://jordansdemo.firebaseio.com/user');
+  var ref = new Firebase('https://jordansdemo.firebaseio.com/users');
 
   ref.on('value', function(snapshot) {
     $scope.$apply(function () {
       $scope.users = snapshot.val();
+      console.log($scope.users);
     });
   });
 
   $scope.navCtrl = 'in the nav controller';
   $scope.viewTransactions = function(user){
-  $state.go('main', {user: user});
+    console.log(user);
+  $state.go('main', {friend: user});
   };
 });
-
-
-
 
 
 

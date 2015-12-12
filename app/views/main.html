@@ -1,21 +1,25 @@
-<div>{{user}}</div>
-
 <div class="col-xs-6">
-  <div ng-repeat="IOU in itemsIOwe">
-    <div>{{IOU}} <span ng-click="removeMyItem($index)" style="color:red; font-style:italic">X</span></div>
+  I Owe {{friend}}:
+  <div ng-repeat="(key,item) in itemsUserOwes">{{}}
+    <div ng-if="item.to == friend">{{item.qty}}x {{item.name}}
+      <span ng-click="updateQuantity(key, item.qty+1, true);" style="color:green">|+|</span><span> </span>
+      <span ng-click="updateQuantity(key, item.qty-1, true);" style="color:dodgerblue">|-|</span><span> </span>
+      <span ng-click="removeItem(key, true);" style="color:red; font-style:italic">|X|</span><span> </span>
+    </div>
   </div>
-  <input ng-model="myItems">
-  <button ng-click="submitMyItems(myItems);">Submit</button>
+  Quantity:<input ng-model="userqty">Item:<input ng-model="useritem">
+  <button ng-click="addItem(userqty, useritem, friend, true)">Add Items</button>
 </div>
 
 <div class="col-xs-6">
-  <div ng-repeat="(item,person) in itemsOwed">
-    <div ng-if="person.Jordan">{{person.Jordan}}x {{item}}
-      <span ng-click="increaseYourItem(item, person.Jordan)" style="color:green;">|+|</span><span> </span>
-      <span ng-click="decreaseYourItem(item, person.Jordan)" style="color:dodgerblue;">|-|</span><span> </span>
-      <span ng-click="removeYourItem(item)" style="color:red; font-style:italic">|X|</span><span> </span>
+  {{friend}} owes me:
+  <div ng-repeat="(key,item) in itemsFriendOwes">
+    <div ng-if="item.to == 'Jordan'">{{item.qty}}x {{item.name}}
+      <span ng-click="updateQuantity(key, item.qty+1, false);" style="color:green">|+|</span><span> </span>
+      <span ng-click="updateQuantity(key, item.qty-1, false);" style="color:dodgerblue">|-|</span><span> </span>
+      <span ng-click="removeItem(key, false);" style="color:red; font-style:italic">|X|</span><span> </span>
     </div>
   </div>
-  Quantity:<input ng-model="yourQty">Item:<input ng-model="yourItems">
-  <button ng-click="submitYourItems(yourQty, yourItems)">Submit</button>
+  Quantity:<input ng-model="qty">Item:<input ng-model="item">
+  <button ng-click="addItem(qty, item, 'Jordan', false)">Add Items</button>
 </div>

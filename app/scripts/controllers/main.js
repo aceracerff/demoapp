@@ -8,41 +8,49 @@
  * Controller of the angulardemoApp
  */
 angular.module('angulardemoApp')
-  .controller('MainCtrl', function ($scope, $stateParams) {
-    $scope.user = $stateParams.user;
-    $scope.itemsIOwe = [];
-    $scope.itemsYouOwe = [];
+  .controller('MainCtrl', function ($scope, $stateParams, $firebaseObject) {
+    $scope.friend = $stateParams.friend;
 
-    var FBref = new Firebase('https://jordansdemo.firebaseio.com/user/' + $scope.user);
+    //Bind the firebase location of our Friend
+    var FBFriendOwesRef = new Firebase('https://jordansdemo.firebaseio.com/items/' + $scope.friend + "/owes");
+    var FBFriendOwesObj = $firebaseObject(FBFriendOwesRef);
+    FBFriendOwesObj.$bindTo($scope, "itemsFriendOwes");
 
-    FBref.on('value', function(snapshot) {
-        $scope.itemsOwed = snapshot.val();
-    });
+    //Bind the firebase location of the user         NOTE: change the "Jordan" here to the app user
+    var FBUserOwesRef = new Firebase('https://jordansdemo.firebaseio.com/items/' + 'Jordan' + "/owes");
+    var FBUserOwesObj = $firebaseObject(FBUserOwesRef);
+    FBUserOwesObj.$bindTo($scope, "itemsUserOwes");
 
-    $scope.increaseYourItem = function (itm, currentVal) {
-      var theVal = FBref.child(itm);
-      theVal.update({Jordan: currentVal+1});
+    $scope.updateQuantity = function (key, qty, addingItemsUserOwes) {
+      if (addingItemsUserOwes) {
+        var FBUserOwesItem = FBUserOwesRef.child(key);
+        FBUserOwesItem.update({qty: qty});
+      }
+      else {
+        var FBFriendOwesItem = FBFriendOwesRef.child(key);
+        FBFriendOwesItem.update({qty: qty});
+      }
     };
 
-    $scope.decreaseYourItem = function (itm, currentVal) {
-      var theVal = FBref.child(itm);
-      theVal.update({Jordan: currentVal-1});
+    $scope.removeItem = function (key, removingItemsUserOwes)  {
+      if (removingItemsUserOwes) {
+        var FBUserItem = FBUserOwesRef.child(key);
+        FBUserItem.remove();
+      }
+      else {
+        var FBFriendItem = FBFriendOwesRef.child(key);
+        FBFriendItem.remove();
+      }
     };
 
-    $scope.submitYourItems = function (qty, itm) {
-
-    };
-
-
-
-    $scope.submitMyItems = function (input) {
-      $scope.itemsIOwe.push(input);
-    };
-
-    $scope.removeMyItem = function (item) {
-      $scope.itemsIOwe.splice(item, 1);
-    };
-    $scope.removeYourItem = function (item) {
-      $scope.itemsYouOwe.splice(item, 1);
+    $scope.addItem = function(qty, item, user, addingItemsUserOwes)  {
+      if (addingItemsUserOwes) {
+        var FBUsernewref = FBUserOwesRef.push();
+        FBUsernewref.set({name: item, qty: qty, to: user});
+      }
+      else {
+        var FBnewref = FBFriendOwesRef.push();
+        FBnewref.set({name: item, qty: qty, to: 'Jordan'});
+      }
     };
   });
