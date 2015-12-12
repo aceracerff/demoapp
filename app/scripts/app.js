@@ -26,7 +26,7 @@ IOU.config(function($stateProvider, $urlRouterProvider){
     templateUrl: '/views/main.html',
     controller: 'MainCtrl',
     params: {
-      user: null
+      friend: null
     }
   });
 });
@@ -43,7 +43,8 @@ IOU.controller('NavCtrl', function($scope, $firebaseArray, $firebaseObject, $sta
 
   $scope.navCtrl = 'in the nav controller';
   $scope.viewTransactions = function(user){
-  $state.go('main', {user: user});
+    console.log(user);
+  $state.go('main', {friend: user});
   };
 });
 

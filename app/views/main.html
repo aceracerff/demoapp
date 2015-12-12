@@ -1,25 +1,25 @@
 <div class="col-xs-6">
-  I Owe {{user}}:
-  <div ng-repeat="(key,item) in itemsUserIsOwed">
-    <div ng-if="item.to == user">{{item.qty}}x {{item.name}}
-      <span ng-click="updateQuantity(key, item.qty+1);" style="color:green">|+|</span><span> </span>
-      <span ng-click="updateQuantity(key, item.qty-1);" style="color:dodgerblue">|-|</span><span> </span>
-      <span ng-click="removeItem(key);" style="color:red; font-style:italic">|X|</span><span> </span>
+  I Owe {{friend}}:
+  <div ng-repeat="(key,item) in itemsUserOwes">{{}}
+    <div ng-if="item.to == friend">{{item.qty}}x {{item.name}}
+      <span ng-click="updateQuantity(key, item.qty+1, true);" style="color:green">|+|</span><span> </span>
+      <span ng-click="updateQuantity(key, item.qty-1, true);" style="color:dodgerblue">|-|</span><span> </span>
+      <span ng-click="removeItem(key, true);" style="color:red; font-style:italic">|X|</span><span> </span>
     </div>
   </div>
-  Quantity:<input ng-model="qty">Item:<input ng-model="item">
-  <button ng-click="addItem(qty, item)">Add Items</button>
+  Quantity:<input ng-model="userqty">Item:<input ng-model="useritem">
+  <button ng-click="addItem(userqty, useritem, friend, true)">Add Items</button>
 </div>
 
 <div class="col-xs-6">
-  {{user}} owes me:
+  {{friend}} owes me:
   <div ng-repeat="(key,item) in itemsFriendOwes">
     <div ng-if="item.to == 'Jordan'">{{item.qty}}x {{item.name}}
-      <span ng-click="updateQuantity(key, item.qty+1);" style="color:green">|+|</span><span> </span>
-      <span ng-click="updateQuantity(key, item.qty-1);" style="color:dodgerblue">|-|</span><span> </span>
-      <span ng-click="removeItem(key);" style="color:red; font-style:italic">|X|</span><span> </span>
+      <span ng-click="updateQuantity(key, item.qty+1, false);" style="color:green">|+|</span><span> </span>
+      <span ng-click="updateQuantity(key, item.qty-1, false);" style="color:dodgerblue">|-|</span><span> </span>
+      <span ng-click="removeItem(key, false);" style="color:red; font-style:italic">|X|</span><span> </span>
     </div>
   </div>
   Quantity:<input ng-model="qty">Item:<input ng-model="item">
-  <button ng-click="addItem(qty, item)">Add Items</button>
+  <button ng-click="addItem(qty, item, 'Jordan', false)">Add Items</button>
 </div>
