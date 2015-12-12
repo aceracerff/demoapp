@@ -16,6 +16,7 @@ angular.module('angulardemoApp')
     var FBFriendOwesObj = $firebaseObject(FBFriendOwesRef);
     FBFriendOwesObj.$bindTo($scope, "itemsFriendOwes");
 
+    //TODO
     //Bind the firebase location of the user         NOTE: change the "Jordan" here to the app user
     var FBUserOwesRef = new Firebase('https://jordansdemo.firebaseio.com/items/' + 'Jordan' + "/owes");
     var FBUserOwesObj = $firebaseObject(FBUserOwesRef);
