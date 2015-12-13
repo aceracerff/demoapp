@@ -8,7 +8,11 @@
  * Controller of the angulardemoApp
  */
 angular.module('angulardemoApp')
-  .controller('MainCtrl', function ($scope, $stateParams, $firebaseObject) {
+  .controller('MainCtrl', function ($scope, $stateParams, $state, $firebaseObject) {
+    //we don't want you here if you havent selected a user
+    if(!$stateParams.friend){
+      $state.go('nav');
+    }
     $scope.friend = $stateParams.friend;
 
     //Bind the firebase location of our Friend
