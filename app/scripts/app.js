@@ -31,35 +31,14 @@ IOU.config(function($stateProvider, $urlRouterProvider){
   });
 });
 
-IOU.controller('NavCtrl', function($scope, $firebaseArray, $firebaseObject, $firebaseAuth, $state){
+IOU.run(function(Auth){
+  console.log("in the run module. Attmpeting to auth via google...");
+  Auth.fromGoogle();
+});
+
+IOU.controller('NavCtrl', function($scope, User, $state){
   var ref = new Firebase('https://jordansdemo.firebaseio.com/users');
-  var obj = $firebaseObject(ref);
-
-  var authRef = new Firebase("https://jordansdemo.firebaseio.com");
-  var auth = $firebaseAuth(authRef);
-
-  auth.$authWithOAuthPopup("google", { scope: 'email' }).then(function(authData) {
-    var userEmail = authData.google.email;
-    var userName = authData.google.displayName;
-    var userImage = authData.google.profileImageURL;
-
-    obj.$loaded().then(function() {
-        $scope.users = obj;
-        var userExists = false;
-        $scope.users.forEach(function(user) {
-          if (user.email == userEmail) userExists = true;
-        });
-        console.log("user exists:" + userExists);
-        if (!userExists) {
-            var FBnewref = ref.push();
-            FBnewref.set({name: userName, email: userEmail, imageURL: userImage});
-        }
-    });
-
-  }).catch(function(error) {
-    console.error("Authentication failed:", error);
-  });
-
+  $scope.authedUserInfo = User.get();
 
   ref.on('value', function(snapshot) {
     $scope.$apply(function () {
